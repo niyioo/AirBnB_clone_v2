@@ -244,3 +244,4 @@ if __name__ == '__main__':
         storage = FileStorage()
     storage.reload()
     HBNBCommand().cmdloop()
+    print()
