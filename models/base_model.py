@@ -35,9 +35,9 @@ class BaseModel:
     def __str__(self):
         """returns class name, id, and attribute dictionary
         """
-        class_name = "[" + self.__class__.__name__ + "]"
+        class_name = f"[{self.__class__.__name__}]"
         dct = {k: v for (k, v) in self.__dict__.items() if v is not None}
-        return class_name + " (" + self.id + ") " + str(dct)
+        return f"{class_name} ({self.id}) {str(dct)}"
 
     def save(self):
         """updates last update time and saves to the database
