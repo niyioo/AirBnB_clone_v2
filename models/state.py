@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 """ module for state """
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from models.city import City
-from models.base import Base
 from os import getenv
 
 
