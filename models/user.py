@@ -15,7 +15,8 @@ class User(BaseModel, Base):
     first_name = Column(String(128), nullable=True)
     last_name = Column(String(128), nullable=True)
 
-    id = Column(Integer, primary_key=True, nullable=False, unique=True)
+    id = Column(Integer, primary_key=True, nullable=False,
+                unique=True, autoincrement=True)
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         places = relationship("Place", backref="user",
