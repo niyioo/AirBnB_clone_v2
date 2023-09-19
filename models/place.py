@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 """ module for place """
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
-from models.user import User
-from models.city import City
+import models
 from os import getenv
 
 place_amenity = Table(
