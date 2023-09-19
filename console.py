@@ -89,8 +89,12 @@ class HBNBCommand(cmd.Cmd):
                 param_dict[key] = value
 
         new_instance = class_dict[class_name](**param_dict)
-        new_instance.save()
-        print(new_instance.id)
+
+        try:
+            new_instance.save()
+            print(new_instance.id)
+        except Exception as e:
+            print(f"Error saving object: {e}")
 
     def do_show(self, arg):
         """ Shows string representation of an instance passed """
