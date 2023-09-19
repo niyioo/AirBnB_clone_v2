@@ -32,7 +32,7 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, default=0, nullable=False)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
-    id = Column(String(60), primary_key=True, nullable=False,
+    id = Column(Integer, primary_key=True, nullable=False,
                 unique=True, autoincrement=True)
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
