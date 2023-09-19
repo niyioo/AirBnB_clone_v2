@@ -3,7 +3,6 @@
 import cmd
 import os
 import shlex
-from models import storage
 from models.base_model import BaseModel
 from models.user import User
 from models.place import Place
@@ -22,6 +21,11 @@ class HBNBCommand(cmd.Cmd):
         'Place', 'City', 'State', 'Review'
     ]
     cmds = ['create', 'show', 'update', 'all', 'destroy', 'count']
+
+    def __init__(self):
+        super().__init__()
+        from models import storage
+        self.storage = storage
 
     def do_quit(self, arg):
         """Quit command to exit the program"""
