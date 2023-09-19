@@ -5,6 +5,7 @@ from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from os import getenv
 import models
+from sqlalchemy.sql import text
 
 metadata = Base.metadata
 
@@ -33,7 +34,7 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     id = Column(Integer, primary_key=True, nullable=False,
-                unique=True, autoincrement=True)
+                autoincrement=True, server_default=text("1"))
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         reviews = relationship("Review", backref="place",
