@@ -11,7 +11,8 @@ class State(BaseModel, Base):
     """State class that inherits from BaseModel and Base"""
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
-    id = Column(String(60), primary_key=True, nullable=False)
+    id = Column(String(60), primary_key=True, nullable=False,
+                default=str(uuid.uuid4()))
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         cities = relationship('City', backref='state',
