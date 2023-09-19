@@ -8,6 +8,8 @@ from sqlalchemy.orm import relationship
 class Amenity(BaseModel, Base):
     """ Amenity class to store Amenity information """
     __tablename__ = 'amenities'
-    
+
     name = Column(String(128), nullable=False)
-    place_amenities = relationship("Place", secondary="place_amenity")
+    place_amenities = relationship("Place", secondary=place_amenity,
+                                   viewonly=False, back_populates="amenities",
+                                   overlaps="amenities")
