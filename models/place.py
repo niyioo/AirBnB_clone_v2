@@ -41,3 +41,13 @@ class Place(BaseModel):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
+        # Define a getter method for reviews in FileStorage
+        def reviews(self):
+            """Getter attribute for reviews in FileStorage"""
+            from models import storage
+            review_list = []
+            for review in storage.all(Review).values():
+                if review.place_id == self.id:
+                    review_list.append(review)
+            return review_list
