@@ -9,7 +9,7 @@ from os import getenv
 class User(BaseModel, Base):
     """This class defines a user by various attributes"""
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        __tablename__ = "users"
+        __tablename__ = 'users'
         id = Column(Integer, primary_key=True, nullable=False,
                     unique=True, autoincrement=True)
         email = Column(String(128), nullable=False)
