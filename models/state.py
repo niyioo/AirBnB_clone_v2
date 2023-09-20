@@ -14,17 +14,17 @@ class State(BaseModel, Base):
     id = Column(String(60), primary_key=True, nullable=False,
                 default=str(uuid.uuid4()))
     cities = relationship('City', backref='state',
-                              cascade='all, delete-orphan')
-    else:
-        @property
-        def cities(self):
-            """getter attribute that returns the list of City instances
-            with state_id equals to the current State.id
-            """
-            from models import storage
-            city_list = []
-            cities = storage.all(City)
-            for city in cities.values():
-                if city.state_id == self.id:
-                    city_list.append(city)
-            return city_list
+                          cascade='all, delete-orphan')
+
+    @property
+    def cities(self):
+        """getter attribute that returns the list of City instances
+        with state_id equals to the current State.id
+        """
+        from models import storage
+        city_list = []
+        cities = storage.all(City)
+        for city in cities.values():
+            if city.state_id == self.id:
+                city_list.append(city)
+        return city_list
