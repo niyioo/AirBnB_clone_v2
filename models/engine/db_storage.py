@@ -32,16 +32,22 @@ class DBStorage:
     def all(self, cls=None):
         """Query all objects depending on class name"""
         obj_dict = {}
-        classes = [User, State, City, Amenity, Place, Review]
 
         if cls:
-            classes = [cls]
+            if type(cls) == str:
+                cls = HBNBCommand.classes.get(cls, None)
+            if cls is None:
+                return obj_dict
 
-        for c in classes:
-            objects = self.__session.query(c).all()
-            for obj in objects:
-                key = "{}.{}".format(type(obj).__name__, obj.id)
-                obj_dict[key] = obj
+            objects = self.__session.query(cls).all()
+        else:
+            all_classes = [User, State, City, Amenity, Place, Review]
+            for c in all_classes:
+                objects = self.__session.query(c).all()
+                for obj in objects:
+                    key = "{}.{}".format(type(obj).__name__, obj.id)
+                    obj_dict[key] = obj
+
         return obj_dict
 
     def new(self, obj):
