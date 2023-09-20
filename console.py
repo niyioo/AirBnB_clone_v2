@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from datetime import datetime  # Added import for datetime
 
 
 class HBNBCommand(cmd.Cmd):
@@ -73,7 +74,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is '}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -113,41 +114,57 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, arg):
+    def do_create(self, args):
         """ Create an object of any class with parameters """
-        if not arg:
+        if not args:
             print("** class name missing **")
             return
 
-        args = arg.split()
-        class_name = args[0]
-        params = args[1:]
+        # Split the command by spaces and '=' to parse parameters
+        parts = args.split()
+        class_name = parts[0]
+        params = {}
 
-        if class_name not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
+        # Parse the parameters
+        for param in parts[1:]:
+            key, value = param.split('=')
 
-        attributes = {}
-        for param in params:
-            parts = param.split('=')
-            if len(parts) == 2:
-                key, value = parts
-                if value.startswith('"') and value.endswith('"'):
-                    value = value[1:-1].replace('\\"', '"').replace('_', ' ')
-                attributes[key] = value
+            # Handle string values with spaces or underscores
+            if value.startswith('"'):
+                value = value[1:]
+                if value.endswith('"'):
+                    value = value[:-1]
+                value = value.replace('_', ' ')
 
-        new_instance = HBNBCommand.classes[class_name](**attributes)
+            # Handle float values
+            elif '.' in value:
+                try:
+                    value = float(value)
+                except ValueError:
+                    pass  # Ignore invalid float values
 
+            # Handle integer values
+            else:
+                try:
+                    value = int(value)
+                except ValueError:
+                    pass  # Ignore invalid integer values
+
+            params[key] = value
+
+        # Create a new instance of the specified class with the attributes
+        params['updated_at'] = datetime.now()  # Add 'updated_at' attribute
         try:
+            new_instance = HBNBCommand.classes[class_name](**params)
             new_instance.save()
             print(new_instance.id)
-        except Exception as e:
-            print(f"Error saving object: {e}")
+        except KeyError:
+            print("** class doesn't exist **")
 
     def help_create(self):
         """ Help information for the create method """
-        print("Creates a class of any type")
-        print("[Usage]: create <className>\n")
+        print("Creates a class of any type with parameters")
+        print("[Usage]: create <className> <param1>=<value1> <param2>=<value2> ...\n")
 
     def do_show(self, args):
         """ Method to show an individual object """
