@@ -1,7 +1,6 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
-from os import getenv
 import uuid
 
 
@@ -12,7 +11,5 @@ class City(BaseModel, Base):
     state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
     id = Column(String(60), primary_key=True, nullable=False,
                 default=str(uuid.uuid4()), unique=True)
-
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
-        places = relationship("Place", backref="cities",
+    places = relationship("Place", backref="cities",
                               cascade="all, delete-orphan")
