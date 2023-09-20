@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""This module defines a base class for all models in our hbnb clone"""
+""" parent class for airbnb """
 import uuid
 from datetime import datetime
 from sqlalchemy import Column, String, DateTime
@@ -9,17 +9,18 @@ Base = declarative_base()
 
 
 class BaseModel:
-    """A base class for all hbnb models"""
+    """Defines all common attributes/methods for SQLAlchemy
+    """
     id = Column(String(60), primary_key=True, nullable=False)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
-        """Instantiates a new model"""
+        """initializes all attributes for SQLAlchemy
+        """
         if not kwargs:
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.utcnow()
-            storage.new(self)
         else:
             if 'created_at' in kwargs:
                 kwargs['created_at'] = datetime.strptime(
@@ -27,27 +28,40 @@ class BaseModel:
             if 'updated_at' in kwargs:
                 kwargs['updated_at'] = datetime.strptime(
                     kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
-            if '__class__' in kwargs:
-                del kwargs['__class__']
-            self.__dict__.update(kwargs)
+            for key, value in kwargs.items():
+                if key != '__class__':
+                    setattr(self, key, value)
 
     def __str__(self):
-        """Returns a string representation of the instance"""
-        cls = type(self).__name__
-        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
+        """returns class name, id, and attribute dictionary
+        """
+        class_name = f"[{self.__class__.__name__}]"
+        dct = {k: v for (k, v) in self.__dict__.items() if v is not None}
+        return f"{class_name} ({self.id}) {str(dct)}"
 
     def save(self):
-        """Updates updated_at with current time when instance is changed"""
-        from models import storage
+        """updates last update time and saves to the database
+        """
         self.updated_at = datetime.utcnow()
+        from models import storage
+        storage.new(self)
         storage.save()
 
     def to_dict(self):
-        """Convert instance into dict format"""
-        dictionary = dict(self.__dict__)
-        dictionary['__class__'] = type(self).__name__
-        dictionary['created_at'] = self.created_at.isoformat()
-        dictionary['updated_at'] = self.updated_at.isoformat()
-        if '_sa_instance_state' in dictionary:
-            del dictionary['_sa_instance_state']
-        return dictionary
+        """creates a new dictionary, adding a key and returning
+        datetimes converted to strings
+        """
+        new_dict = self.__dict__.copy()
+        if '_sa_instance_state' in new_dict:
+            del new_dict['_sa_instance_state']
+        for key, value in new_dict.items():
+            if isinstance(value, datetime):
+                new_dict[key] = value.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        new_dict['__class__'] = self.__class__.__name__
+        return new_dict
+
+    def delete(self):
+        """Deletes the current instance from the storage (models.storage)
+        """
+        from models import storage
+        storage.delete(self)
