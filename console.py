@@ -233,7 +233,7 @@ class HBNBCommand(cmd.Cmd):
         print("[Usage]: destroy <className> <objectId>\n")
 
     def do_all(self, line):
-        """Prints all string representation of all instances based on class name"""
+        """Prints all string representations of all instances based on class name"""
         args = line.split()
         if not args:
             print("** class name missing **")
