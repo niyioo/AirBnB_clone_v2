@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 """DB Storage Engine Module"""
 import os
+import models
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-from models.base_model import Base
+from models.base_model import BaseModel, Base
 from models.user import User
 from models.state import State
 from models.city import City
@@ -32,23 +33,16 @@ class DBStorage:
     def all(self, cls=None):
         """Query all objects depending on class name"""
         obj_dict = {}
+        classes = [User, State, City, Amenity, Place, Review]
 
         if cls:
-            if type(cls) == str:
-                cls = HBNBCommand.classes.get(cls, None)
-            if cls is None:
-                return obj_dict
+            classes = [cls]
 
-            objects = self.__session.query(cls).all()
-        else:
-            all_classes = [User, State, City, Amenity, Place, Review]
-            for c in all_classes:
-                table = c.__table__  # Get the table associated with the class
-                objects = self.__session.query(c).all()
-                for obj in objects:
-                    key = "{}.{}".format(type(obj).__name__, obj.id)
-                    obj_dict[key] = obj
-
+        for c in classes:
+            objects = self.__session.query(c).all()
+            for obj in objects:
+                key = "{}.{}".format(type(obj).__name__, obj.id)
+                obj_dict[key] = obj
         return obj_dict
 
     def new(self, obj):
