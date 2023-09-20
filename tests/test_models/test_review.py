@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-""" """
+""" Unit tests for Review class """
+import unittest
 from tests.test_models.test_base_model import test_basemodel
 from models.review import Review
 
@@ -27,3 +28,21 @@ class test_review(test_basemodel):
         """ """
         new = self.value()
         self.assertEqual(type(new.text), str)
+
+    def test_place_id_attribute(self):
+        """Test place_id attribute"""
+        new_review = self.value()
+        self.assertEqual(type(new_review.place_id), str)
+
+    def test_user_id_attribute(self):
+        """Test user_id attribute"""
+        new_review = self.value()
+        self.assertEqual(type(new_review.user_id), str)
+
+    def test_text_attribute(self):
+        """Test text attribute"""
+        new_review = self.value()
+        self.assertEqual(type(new_review.text), str)
+
+if __name__ == '__main__':
+    unittest.main()

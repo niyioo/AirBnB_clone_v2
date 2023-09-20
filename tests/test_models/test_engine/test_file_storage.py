@@ -6,19 +6,19 @@ from models import storage
 import os
 
 
-class test_fileStorage(unittest.TestCase):
+class TestFileStorage(unittest.TestCase):
     """ Class to test the file storage method """
 
     def setUp(self):
         """ Set up test environment """
         del_list = []
-        for key in storage._FileStorage__objects.keys():
+        for key in storage.all().keys():
             del_list.append(key)
         for key in del_list:
-            del storage._FileStorage__objects[key]
+            del storage.all()[key]
 
     def tearDown(self):
-        """ Remove storage file at end of tests """
+        """ Remove storage file at the end of tests """
         try:
             os.remove('file.json')
         except:
@@ -47,7 +47,7 @@ class test_fileStorage(unittest.TestCase):
         self.assertFalse(os.path.exists('file.json'))
 
     def test_empty(self):
-        """ Data is saved to file """
+        """ Data is saved to the file """
         new = BaseModel()
         thing = new.to_dict()
         new.save()
@@ -77,7 +77,7 @@ class test_fileStorage(unittest.TestCase):
             storage.reload()
 
     def test_reload_from_nonexistent(self):
-        """ Nothing happens if file does not exist """
+        """ Nothing happens if the file does not exist """
         self.assertEqual(storage.reload(), None)
 
     def test_base_model_save(self):
@@ -105,5 +105,7 @@ class test_fileStorage(unittest.TestCase):
     def test_storage_var_created(self):
         """ FileStorage object storage created """
         from models.engine.file_storage import FileStorage
-        print(type(storage))
         self.assertEqual(type(storage), FileStorage)
+
+if __name__ == '__main__':
+    unittest.main()
