@@ -1,12 +1,15 @@
+#!/usr/bin/python3
+""" State Module for HBNB project """
 from sqlalchemy.ext.declarative import declarative_base
-Base = declarative_base()
-
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from os import getenv
+from models.base_model import BaseModel
+
+Base = declarative_base()
 
 
-class State(Base):
+class State(BaseModel, Base):
     """ State class """
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = 'states'
