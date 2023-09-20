@@ -228,5 +228,12 @@ class HBNBCommand(cmd.Cmd):
 
 
 if __name__ == '__main__':
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        from models.engine.db_storage import DBStorage
+        storage = DBStorage()
+    else:
+        from models.engine.file_storage import FileStorage
+        storage = FileStorage()
     storage.reload()
     HBNBCommand().cmdloop()
+    print()
