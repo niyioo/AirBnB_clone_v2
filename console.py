@@ -3,7 +3,6 @@
 import cmd
 import os
 import shlex
-from models import storage
 from models.base_model import BaseModel
 from models.user import User
 from models.place import Place
