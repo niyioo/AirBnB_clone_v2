@@ -43,6 +43,7 @@ class DBStorage:
         else:
             all_classes = [User, State, City, Amenity, Place, Review]
             for c in all_classes:
+                table = c.__table__  # Get the table associated with the class
                 objects = self.__session.query(c).all()
                 for obj in objects:
                     key = "{}.{}".format(type(obj).__name__, obj.id)
