@@ -153,7 +153,6 @@ class HBNBCommand(cmd.Cmd):
             params[key] = value
 
         # Create a new instance of the specified class with the attributes
-        params['updated_at'] = datetime.now()  # Add 'updated_at' attribute
         try:
             new_instance = HBNBCommand.classes[class_name](**params)
             new_instance.save()
