@@ -1,12 +1,23 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
-from models.base_model import BaseModel
-from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from models.base_model import BaseModel, Base
+from models.amenity import Amenity
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from os import getenv
 
+# Create the place_amenity table for the Many-To-Many relationship
+place_amenity = Table(
+    'place_amenity',
+    Base.metadata,
+    Column('place_id', String(60), ForeignKey('places.id'),
+           primary_key=True, nullable=False),
+    Column('amenity_id', String(60), ForeignKey('amenities.id'),
+           primary_key=True, nullable=False)
+)
 
-class Place(BaseModel):
+
+class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = 'places'
 
@@ -25,8 +36,15 @@ class Place(BaseModel):
         # Relationships
         reviews = relationship('Review', backref='place',
                                cascade='all, delete-orphan')
-        amenities = relationship('Amenity', secondary='place_amenity',
-                                 viewonly=False, back_populates='place_amenities')
+
+        # Define the Many-To-Many relationship with Amenity
+        amenities = relationship(
+            'Amenity',
+            secondary=place_amenity,
+            viewonly=False,
+            back_populates='place_amenities'
+        )
+
         amenity_ids = []
 
     else:
@@ -51,3 +69,20 @@ class Place(BaseModel):
                 if review.place_id == self.id:
                     review_list.append(review)
             return review_list
+
+        @property
+        def amenities(self):
+            """Getter attribute for amenities in FileStorage"""
+            from models import storage
+            amenity_list = []
+            for amenity_id in self.amenity_ids:
+                amenity = storage.get(Amenity, amenity_id)
+                if amenity:
+                    amenity_list.append(amenity)
+            return amenity_list
+
+        @amenities.setter
+        def amenities(self, amenity):
+            """Setter attribute for amenities in FileStorage"""
+            if isinstance(amenity, Amenity):
+                self.amenity_ids.append(amenity.id)
