@@ -3,6 +3,7 @@
 import cmd
 import os
 import shlex
+from models import storage
 from models.base_model import BaseModel
 from models.user import User
 from models.place import Place
@@ -13,45 +14,40 @@ from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
-    """Command processor"""
+    """HBNBCommand class for a command-line interface."""
 
     prompt = "(hbnb) "
-    classes = [
-        'BaseModel', 'User', 'Amenity',
-        'Place', 'City', 'State', 'Review'
-    ]
+    classes = ['BaseModel', 'User', 'Amenity',
+               'Place', 'City', 'State', 'Review']
     cmds = ['create', 'show', 'update', 'all', 'destroy', 'count']
 
     def __init__(self):
+        """Initialize the HBNBCommand instance."""
         super().__init__()
-        from models import storage
-        self.storage = storage
 
     def do_quit(self, arg):
-        """Quit command to exit the program"""
+        """Quit command to exit the program."""
         return True
 
     def do_EOF(self, arg):
-        """Exit the console using Ctrl+D"""
+        """EOF command to exit the program (Ctrl+D)."""
         return True
 
     def emptyline(self):
-        """Do nothing when an empty line is entered"""
+        """Emptyline method to override the default behavior."""
         pass
 
     def precmd(self, arg):
-        """parses command input"""
-        if '.' in arg and '(' in arg and ')' in arg:
-            clsn = arg.split('.')
-            cmdn = clsn[1].split('(')
-            arguments = cmdn[1].split(')')
-            if clsn[0] in HBNBCommand.classes and cmdn[0] in HBNBCommand.cmds:
-                arg = cmdn[0] + ' ' + clsn[0] + ' ' + arguments[0]
+        """Pre-command method to handle method names with class names."""
+        parts = arg.split('(')
+        if len(parts) == 2:
+            cmd_name, params = parts
+            class_name, method_name = cmd_name.split('.')
+            return f"{method_name} {class_name} {params.strip(')')}"
         return arg
 
     def do_create(self, arg):
-        """ Creates an instance according to a given class with parameters """
-
+        """Create a new instance of a class and save it to JSON file."""
         if not arg:
             print("** class name missing **")
             return
@@ -89,16 +85,11 @@ class HBNBCommand(cmd.Cmd):
                 param_dict[key] = value
 
         new_instance = class_dict[class_name](**param_dict)
-
-        try:
-            new_instance.save()
-            print(new_instance.id)
-        except Exception as e:
-            print(f"Error saving object: {e}")
+        new_instance.save()
+        print(new_instance.id)
 
     def do_show(self, arg):
-        """ Shows string representation of an instance passed """
-
+        """Show the string representation of an instance."""
         if not arg:
             print("** class name missing **")
             return
@@ -120,8 +111,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_destroy(self, arg):
-        """ Deletes an instance passed """
-
+        """Destroy an instance based on class name and id."""
         if not arg:
             print("** class name missing **")
             return
@@ -145,8 +135,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_all(self, arg):
-        """ Prints string represention of all instances of a given class """
-
+        """Show all instances of a class or all classes."""
         if not arg:
             print("** class name missing **")
             return
@@ -165,8 +154,7 @@ class HBNBCommand(cmd.Cmd):
             print(instance_list)
 
     def do_update(self, arg):
-        """ Updates an instance based on the class name and id """
-
+        """Update an instance's attribute value."""
         if not arg:
             print("** class name missing **")
             return
@@ -198,7 +186,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_count(self, class_name):
-        """counts number of instances of a class"""
+        """Count the instances of a class."""
         count = 0
         all_objs = storage.all()
         for k, v in all_objs.items():
@@ -208,7 +196,7 @@ class HBNBCommand(cmd.Cmd):
         print(count)
 
     def do_help(self, arg):
-        """Display help information for commands."""
+        """Provide a description of a given command."""
         if arg:
             cmd.Cmd.do_help(self, arg)
         else:
@@ -219,29 +207,26 @@ class HBNBCommand(cmd.Cmd):
             print()
 
     def help_quit(self):
+        """Provide help for the quit command."""
         print("Quit command to exit the program")
 
     def help_EOF(self):
+        """Provide help for the EOF command."""
         print("EOF command to exit the program (Ctrl+D)")
 
     def help_create(self):
+        """Provide help for the create command."""
         print("Create a new instance of BaseModel and save it to JSON file.")
 
     def help_show(self):
+        """Provide help for the show command."""
         print("Show the string representation of an instance.")
 
     def help_help(self):
-        """ Prints help command description """
+        """Provide help for the help command."""
         print("Provides description of a given command")
 
 
 if __name__ == '__main__':
-    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        from models.engine.db_storage import DBStorage
-        storage = DBStorage()
-    else:
-        from models.engine.file_storage import FileStorage
-        storage = FileStorage()
     storage.reload()
     HBNBCommand().cmdloop()
-    print()
