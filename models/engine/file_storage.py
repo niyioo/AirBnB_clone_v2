@@ -14,7 +14,7 @@ class FileStorage:
         If cls is provided, it returns a dictionary of objects
         of the specified class.
         """
-        if cls is None:
+        if cls == None:
             return FileStorage.__objects
         else:
             cls_name = type(cls).__name__
@@ -66,7 +66,7 @@ class FileStorage:
         Deletes obj from __objects if it's inside.
         If obj is equal to None, the method does nothing.
         """
-        if obj is not None:
+        if obj != None:
             key = "{}.{}".format(obj.__class__.__name__, obj.id)
             if key in FileStorage.__objects:
                 del FileStorage.__objects[key]
