@@ -1,7 +1,14 @@
 #!/usr/bin/python3
-""" File storage for the airbnb """
+"""File storage for the Airbnb-like application."""
 import json
 import os
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class FileStorage:
@@ -14,7 +21,7 @@ class FileStorage:
         Returns a dictionary of all objects of a specific class if cls is
         provided, or all objects if cls is None.
         """
-        if cls is not None:
+        if cls != None:
             objects = {
                 key: obj
                 for key, obj in FileStorage.__objects.items()
@@ -41,13 +48,6 @@ class FileStorage:
 
     def reload(self):
         """Deserialize the JSON file to __objects."""
-        from models.base_model import BaseModel
-        from models.user import User
-        from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
-        from models.place import Place
-        from models.review import Review
         cls = {
             'BaseModel': BaseModel, 'User': User, 'Place': Place,
             'City': City, 'Amenity': Amenity, 'State': State,
