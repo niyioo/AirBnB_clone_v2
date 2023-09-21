@@ -14,6 +14,9 @@ class City(BaseModel, Base):
     state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
     state = relationship("State", back_populates="cities")
 
-    if getenv('HBNB_TYPE_STORAGE') != 'db':
-        state_id = ""
-        name = ""
+    def __init__(self, *args, **kwargs):
+        """Initialize City instance"""
+        super().__init__(*args, **kwargs)
+        if getenv('HBNB_TYPE_STORAGE') != 'db':
+            self.state_id = ""
+            self.name = ""
