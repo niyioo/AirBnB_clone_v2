@@ -22,5 +22,6 @@ class test_Amenity(test_basemodel):
         new_amenity = self.value()
         self.assertTrue(hasattr(new_amenity, "place_amenities"))
 
+
 if __name__ == '__main__':
     unittest.main()
