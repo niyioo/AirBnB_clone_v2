@@ -162,7 +162,8 @@ class HBNBCommand(cmd.Cmd):
     def help_create(self):
         """ Help information for the create method """
         print("Creates a class of any type with parameters")
-        print("[Usage]: create <className> <param1>=<value1> <param2>=<value2> ...\n")
+        print("[Usage]: create <className> <param1>=<value1> "
+              "<param2>=<value2> ...\n")
 
     def do_show(self, args):
         """ Method to show an individual object """
@@ -231,7 +232,8 @@ class HBNBCommand(cmd.Cmd):
         print("[Usage]: destroy <className> <objectId>\n")
 
     def do_all(self, line):
-        """Prints all string representations of all instances based on class name"""
+        """Prints all string representations of all instances
+        based on class name"""
         args = line.split()
         if not args:
             print("** class name missing **")
