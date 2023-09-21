@@ -8,7 +8,7 @@ from models.base_model import BaseModel
 from models import storage
 
 
-class test_baseModel(unittest.TestCase):
+class test_BaseModel(unittest.TestCase):
     """ Test cases for BaseModel class """
 
     def setUp(self):
@@ -67,14 +67,11 @@ class test_baseModel(unittest.TestCase):
         self.assertEqual(type(self.model.to_dict()), dict)
         self.assertEqual(self.model.to_dict()['id'], self.model.id)
         self.assertEqual(self.model.to_dict()['name'], self.model.name)
-        self.assertEqual(self.model.to_dict()['my_number'],
-                         self.model.my_number)
+        self.assertEqual(self.model.to_dict()['my_number'], self.model.my_number)
         self.assertEqual(
-            self.model.to_dict()['created_at'],
-            self.model.created_at.isoformat())
+            self.model.to_dict()['created_at'], self.model.created_at.isoformat())
         self.assertEqual(
-            self.model.to_dict()['updated_at'],
-            self.model.updated_at.isoformat())
+            self.model.to_dict()['updated_at'], self.model.updated_at.isoformat())
 
     def test_kwargs_none(self):
         """ Test invalid dictionary with None values """

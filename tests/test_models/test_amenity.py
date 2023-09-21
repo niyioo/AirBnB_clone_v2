@@ -6,7 +6,14 @@ from models.amenity import Amenity
 
 
 class test_Amenity(test_basemodel):
-    """ Test cases for the Amenity class """
+    """ """
+
+    def __init__(self, *args, **kwargs):
+        """ """
+        super().__init__(*args, **kwargs)
+        self.name = "Amenity"
+        self.value = Amenity
+
     def test_name2(self):
         """ """
         new = self.value()
