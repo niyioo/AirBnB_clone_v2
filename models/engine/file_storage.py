@@ -17,7 +17,7 @@ class FileStorage:
         if cls is None:
             return FileStorage.__objects
         else:
-            cls_name = cls.__name__
+            cls_name = type(cls).__name__
             return {
                 key: obj
                 for key, obj in FileStorage.__objects.items()
