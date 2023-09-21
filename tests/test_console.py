@@ -109,5 +109,6 @@ class TestConsole(unittest.TestCase):
         updated_obj = storage.all()["BaseModel." + obj_id]
         self.assertEqual(updated_obj["name"], "NewName")
 
+
 if __name__ == '__main__':
     unittest.main()
