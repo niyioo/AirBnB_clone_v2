@@ -6,7 +6,7 @@ from models import storage
 import os
 
 
-class TestFileStorage(unittest.TestCase):
+class test_fileStorage(unittest.TestCase):
     """ Class to test the file storage method """
 
     def setUp(self):
