@@ -17,35 +17,24 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Instantiates a new model"""
-        if not kwargs:
-            from models import storage
-            self.id = str(uuid.uuid4())
-            self.created_at = self.updated_at = datetime.now()
-            storage.new(self)
+        if kwargs:
+            for key in kwargs:
+                if key == "__class__":
+                    continue
+                elif key in ("created_at", "updated_at"):
+                    iso = "%Y-%m-%dT%H:%M:%S.%f"
+                    setattr(self, key, datetime.strptime(kwargs[key], iso))
+                else:
+                    setattr(self, key, kwargs[key])
+                self.id = str(uuid4())
         else:
-            for key, value in kwargs.items():
-                if key != '__class__':
-                    setattr(self, key, value)
-            if 'created_at' in kwargs:
-                kwargs['created_at'] = datetime.strptime(
-                    kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
-            if 'updated_at' in kwargs:
-                kwargs['updated_at'] = datetime.strptime(
-                    kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
-            if 'id' not in kwargs:
-                self.id = str(uuid.uuid4())
-            if 'created_at' not in kwargs:
-                self.created_at = self.updated_at = datetime.now()
+            self.id = str(uuid4())
+            self.created_at = self.updated_at = datetime.now()
 
     def __str__(self):
         """Returns a string representation of the instance"""
-        dictionary = self.to_dict()
-        return '[{}] ({}) {}'.format(type(self).__name__,
-                                     self.id, self._dictionary)
-    
-    def __repr__(self):
-        """Returns a string representation"""
-        return self.__str__()
+        return "[{}] ({}) {}".format(self.__class__.__name__,
+                                     self.id, self.__dict__)
 
     def save(self):
         """Updates updated_at with the current time when the instance is changed"""
