@@ -11,12 +11,6 @@ from models import storage
 class TestBaseModel(unittest.TestCase):
     """ Test cases for BaseModel class """
 
-    def __init__(self, *args, **kwargs):
-        """ """
-        super().__init__(*args, **kwargs)
-        self.name = 'BaseModel'
-        self.value = BaseModel
-        
     def setUp(self):
         """ Set up test environment """
         self.model = BaseModel()
