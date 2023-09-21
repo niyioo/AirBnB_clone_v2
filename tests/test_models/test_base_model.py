@@ -22,7 +22,7 @@ class test_baseModel(unittest.TestCase):
         storage._FileStorage__objects = {}
         try:
             os.remove('file.json')
-        except:
+        except FileNotFoundError:
             pass
 
     def test_default(self):
@@ -67,11 +67,14 @@ class test_baseModel(unittest.TestCase):
         self.assertEqual(type(self.model.to_dict()), dict)
         self.assertEqual(self.model.to_dict()['id'], self.model.id)
         self.assertEqual(self.model.to_dict()['name'], self.model.name)
-        self.assertEqual(self.model.to_dict()['my_number'], self.model.my_number)
+        self.assertEqual(self.model.to_dict()['my_number'],
+                         self.model.my_number)
         self.assertEqual(
-            self.model.to_dict()['created_at'], self.model.created_at.isoformat())
+            self.model.to_dict()['created_at'],
+            self.model.created_at.isoformat())
         self.assertEqual(
-            self.model.to_dict()['updated_at'], self.model.updated_at.isoformat())
+            self.model.to_dict()['updated_at'],
+            self.model.updated_at.isoformat())
 
     def test_kwargs_none(self):
         """ Test invalid dictionary with None values """
@@ -100,6 +103,7 @@ class test_baseModel(unittest.TestCase):
         new = BaseModel()
         self.assertIsInstance(new.updated_at, datetime.datetime)
         self.assertFalse(new.created_at == new.updated_at)
+
 
 if __name__ == '__main__':
     unittest.main()

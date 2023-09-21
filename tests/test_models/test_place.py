@@ -134,5 +134,6 @@ class test_Place(test_basemodel):
         new_place = self.value()
         self.assertTrue(hasattr(new_place, "amenities"))
 
+
 if __name__ == '__main__':
     unittest.main()

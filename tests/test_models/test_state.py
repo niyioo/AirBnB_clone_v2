@@ -24,5 +24,6 @@ class test_state(test_basemodel):
         new_state = self.value()
         self.assertEqual(type(new_state.name), str)
 
+
 if __name__ == '__main__':
     unittest.main()

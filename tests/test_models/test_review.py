@@ -44,5 +44,6 @@ class test_review(test_basemodel):
         new_review = self.value()
         self.assertEqual(type(new_review.text), str)
 
+
 if __name__ == '__main__':
     unittest.main()
