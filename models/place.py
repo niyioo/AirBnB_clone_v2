@@ -63,26 +63,19 @@ class Place(BaseModel, Base):
         # Define a getter method for reviews in FileStorage
         def reviews(self):
             """Getter attribute for reviews in FileStorage"""
-            from models import storage
-            review_list = []
-            for review in storage.all(Review).values():
-                if review.place_id == self.id:
-                    review_list.append(review)
-            return review_list
+            import models
+            return [review for review in models.storage.all(Review)
+                    if review.place_id == self.id]
 
         @property
         def amenities(self):
             """Getter attribute for amenities in FileStorage"""
-            from models import storage
-            amenity_list = []
-            for amenity_id in self.amenity_ids:
-                amenity = storage.get(Amenity, amenity_id)
-                if amenity:
-                    amenity_list.append(amenity)
-            return amenity_list
+            import models
+            return [amenity for amenity in models.storage.all(Amenity)
+                    if amenity.id in self.amenity_ids]
 
         @amenities.setter
-        def amenities(self, amenity):
+        def amenities(self, object):
             """Setter attribute for amenities in FileStorage"""
-            if isinstance(amenity, Amenity):
-                self.amenity_ids.append(amenity.id)
+            if (type(object) == Amenity):
+                self.amenity_ids.append(object.id)
