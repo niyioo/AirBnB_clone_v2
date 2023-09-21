@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 """Unit tests for City class"""
 import unittest
-from tests.test_models.test_base_model import test_basemodel
 from models.city import City
+from tests.test_models.test_base_model import TestBaseModel
 
 
-class test_City(test_basemodel):
-    """ """
+class TestCity(TestBaseModel):
+    """Test City class"""
 
     def __init__(self, *args, **kwargs):
-        """ """
+        """Initialize test class"""
         super().__init__(*args, **kwargs)
         self.name = "City"
         self.value = City

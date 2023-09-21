@@ -6,7 +6,7 @@ from models import storage
 import os
 
 
-class test_FileStorage(unittest.TestCase):
+class TestFileStorage(unittest.TestCase):
     """ Class to test the file storage method """
 
     def setUp(self):
@@ -21,7 +21,7 @@ class test_FileStorage(unittest.TestCase):
         """ Remove storage file at the end of tests """
         try:
             os.remove('file.json')
-        except FileNotFoundError:
+        except:
             pass
 
     def test_obj_list_empty(self):

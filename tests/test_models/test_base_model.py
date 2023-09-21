@@ -8,7 +8,7 @@ from models.base_model import BaseModel
 from models import storage
 
 
-class test_BaseModel(unittest.TestCase):
+class TestBaseModel(unittest.TestCase):
     """ Test cases for BaseModel class """
 
     def setUp(self):

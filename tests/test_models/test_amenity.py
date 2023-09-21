@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 """Unit tests for Amenity class"""
 import unittest
-from tests.test_models.test_base_model import test_basemodel
 from models.amenity import Amenity
+from tests.test_models.test_base_model import TestBaseModel
 
 
-class test_Amenity(test_basemodel):
-    """ """
+class TestAmenity(TestBaseModel):
+    """Test Amenity class"""
 
     def __init__(self, *args, **kwargs):
-        """ """
+        """Initialize test class"""
         super().__init__(*args, **kwargs)
         self.name = "Amenity"
         self.value = Amenity
