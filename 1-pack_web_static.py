@@ -12,6 +12,7 @@ archive has been correctly generated. Otherwise, it should return None.
 """
 
 import os
+from fabric.api import local
 from datetime import datetime
 import tarfile
 
@@ -24,23 +25,19 @@ def do_pack():
         Archive path if successful, None otherwise.
     """
     try:
-        # Generate archive name based on current date and time
         now = datetime.now()
         timestamp = now.strftime("%Y%m%d%H%M%S")
         archive_name = "web_static_{}.tgz".format(timestamp)
 
         # Create the 'versions' directory if it doesn't exist
-        if not os.path.exists("versions"):
-            os.mkdir("versions")
+        local("mkdir -p versions")
 
         # Compress the 'web_static' directory into a .tgz archive
-        with tarfile.open(
-            "versions/{}".format(archive_name),
-            "w:gz"
-        ) as archive:
-            archive.add("web_static", arcname=os.path.basename("web_static"))
+        local("tar -cvzf versions/{} web_static".format(archive_name))
 
-        # Return the path to the archive
+        # Display the packed files
+        local("tar tvf versions/{}".format(archive_name))
+
         return "versions/{}".format(archive_name)
     except Exception:
         return None
