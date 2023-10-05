@@ -17,7 +17,7 @@ def deploy():
     Deploy the web_static content to the web servers.
     """
     archive_path = do_pack()
-    
+
     if archive_path:
         return do_deploy(archive_path)
     else:
