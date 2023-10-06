@@ -25,26 +25,11 @@ def do_pack():
         Archive path if successful, None otherwise.
     """
     try:
-        now = datetime.now()
-        timestamp = now.strftime("%Y%m%d%H%M%S")
-        archive_name = "web_static_{}.tgz".format(timestamp)
-
-        # Create the 'versions' directory if it doesn't exist
-        local("mkdir -p versions")
-
-        # Compress the 'web_static' directory into a .tgz archive
-        local("tar -cvzf versions/{} web_static".format(archive_name))
-
-        # Display the packed files
-        local("tar tvf versions/{}".format(archive_name))
-
-        return "versions/{}".format(archive_name)
-    except Exception:
+        date = datetime.now().strftime("%Y%m%d%H%M%S")
+        if isdir("versions") is False:
+            local("mkdir versions")
+        file_name = "versions/web_static_{}.tgz".format(date)
+        local("tar -cvzf {} web_static".format(file_name))
+        return file_name
+    except:
         return None
-
-if __name__ == "__main__":
-    result = do_pack()
-    if result:
-        print("Archive created:", result)
-    else:
-        print("Archive creation failed.")
