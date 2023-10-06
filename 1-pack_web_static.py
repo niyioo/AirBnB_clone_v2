@@ -11,10 +11,11 @@ The function do_pack must return the archive path if the
 archive has been correctly generated. Otherwise, it should return None.
 """
 
-import os
+import os.path
 from fabric.api import local
 from datetime import datetime
 import tarfile
+import re
 
 
 def do_pack():
@@ -24,12 +25,11 @@ def do_pack():
     Returns:
         Archive path if successful, None otherwise.
     """
-    try:
-        date = datetime.now().strftime("%Y%m%d%H%M%S")
-        if isdir("versions") is False:
-            local("mkdir versions")
-        file_name = "versions/web_static_{}.tgz".format(date)
-        local("tar -cvzf {} web_static".format(file_name))
-        return file_name
-    except:
+    target = local("mkdir -p versions")
+    name = str(datetime.now()).replace(" ", '')
+    opt = re.sub(r'[^\w\s]', '', name)
+    tar = local('tar -cvzf versions/web_static_{}.tgz web_static'.format(opt))
+    if os.path.exists("./versions/web_static_{}.tgz".format(opt)):
+        return os.path.normpath("/versions/web_static_{}.tgz".format(opt))
+    else:
         return None
