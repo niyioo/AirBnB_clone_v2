@@ -12,7 +12,7 @@ class City(BaseModel, Base):
     name = Column(String(128), nullable=False)
     place_id = Column(String(60), ForeignKey('places.id'), nullable=False)
     state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
-    places = relationship('Place', backref='cities', cascade='all, delete-orphan', foreign_keys='Place.city_id')
+    places = relationship('Place', backref='city', cascade='all, delete-orphan', foreign_keys='Place.city_id')
     places_in_city = relationship('Place', backref='city', foreign_keys='Place.city_id', overlaps="cities")
 
     def __init__(self, *args, **kwargs):
