@@ -17,7 +17,6 @@ place_amenity = Table(
            primary_key=True, nullable=False)
 )
 
-
 class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = 'places'
@@ -53,25 +52,3 @@ class Place(BaseModel, Base):
         price_by_night = 0
         latitude = 0.0
         longitude = 0.0
-        amenity_ids = []
-
-
-    # Define a getter method for reviews in FileStorage
-    def reviews(self):
-        """Getter attribute for reviews in FileStorage"""
-        import models
-        return [review for review in models.storage.all(Review)
-                if review.place_id == self.id]
-
-    @property
-    def amenities(self):
-        """Getter attribute for amenities in FileStorage"""
-        import models
-        return [amenity for amenity in models.storage.all(Amenity)
-                if amenity.id in self.amenity_ids]
-
-    @amenities.setter
-    def amenities(self, object):
-        """Setter attribute for amenities in FileStorage"""
-        if (type(object) == Amenity):
-            self.amenity_ids.append(object.id)
