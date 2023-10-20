@@ -17,9 +17,6 @@ class User(BaseModel, Base):
     last_name = Column(String(128), nullable=True)
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        places = relationship('Place', backref='user',
-                              cascade='all, delete-orphan',
-                              foreign_keys='Place.user_id',
-                              back_populates='user')
+        places = relationship('Place', backref='user')
         reviews = relationship('Review', backref='user',
                                cascade='all, delete-orphan')
