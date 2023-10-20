@@ -45,8 +45,6 @@ class Place(BaseModel, Base):
             back_populates='place_amenities'
         )
 
-        amenity_ids = []
-
     else:
         city_id = ""
         user_id = ""
@@ -60,26 +58,23 @@ class Place(BaseModel, Base):
         longitude = 0.0
         amenity_ids = []
 
-    def __init__(self, *args, **kwargs):
-        """initializes Place"""
-        super().__init__(*args, **kwargs)
 
-        # Define a getter method for reviews in FileStorage
-        def reviews(self):
-            """Getter attribute for reviews in FileStorage"""
-            import models
-            return [review for review in models.storage.all(Review)
-                    if review.place_id == self.id]
+    # Define a getter method for reviews in FileStorage
+    def reviews(self):
+        """Getter attribute for reviews in FileStorage"""
+        import models
+        return [review for review in models.storage.all(Review)
+                if review.place_id == self.id]
 
-        @property
-        def amenities(self):
-            """Getter attribute for amenities in FileStorage"""
-            import models
-            return [amenity for amenity in models.storage.all(Amenity)
-                    if amenity.id in self.amenity_ids]
+    @property
+    def amenities(self):
+        """Getter attribute for amenities in FileStorage"""
+        import models
+        return [amenity for amenity in models.storage.all(Amenity)
+                if amenity.id in self.amenity_ids]
 
-        @amenities.setter
-        def amenities(self, object):
-            """Setter attribute for amenities in FileStorage"""
-            if (type(object) == Amenity):
-                self.amenity_ids.append(object.id)
+    @amenities.setter
+    def amenities(self, object):
+        """Setter attribute for amenities in FileStorage"""
+        if (type(object) == Amenity):
+            self.amenity_ids.append(object.id)
