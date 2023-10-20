@@ -34,11 +34,11 @@ class Place(BaseModel, Base):
         longitude = Column(Float)
 
         # Relationships
-        city = relationship('City', backref='places')
+        city = relationship('City', backref='places', foreign_keys='Place.city_id', overlaps="cities")
         reviews = relationship('Review', backref='place', cascade='all, delete-orphan')
         # Define the Many-To-Many relationship with Amenity
         amenities = relationship('Amenity', secondary=place_amenity, viewonly=False, back_populates='place_amenities')
-        city_in_place = relationship('City', backref='places_in_city')
+        city_in_place = relationship('City', backref='places_in_city', foreign_keys='City.id')
 
     else:
         city_id = ""
