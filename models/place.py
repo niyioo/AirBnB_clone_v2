@@ -34,6 +34,7 @@ class Place(BaseModel, Base):
         longitude = Column(Float)
 
         # Relationships for DBStorage
+        city = relationship('City', back_populates='places', foreign_keys='Place.city_id')
         reviews = relationship('Review', backref='place', cascade='all, delete-orphan', passive_deletes=True)
         amenities = relationship('Amenity', secondary=place_amenity, viewonly=False, back_populates='place_amenities')
 
