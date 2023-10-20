@@ -25,3 +25,7 @@ class State(BaseModel, Base):
             """Getter attribute in case of file storage"""
             return [city for city in models.storage.all(City).values()
                     if city.state_id == self.id]
+
+    def __init__(self, *args, **kwargs):
+        """Initialize the State object"""
+        super().__init__(*args, **kwargs)
