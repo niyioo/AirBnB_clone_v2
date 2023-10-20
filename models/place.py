@@ -35,7 +35,6 @@ class Place(BaseModel, Base):
 
         # Relationships
         city = relationship('City', backref='places', foreign_keys='Place.city_id')
-        user = relationship('User', backref='places')
         reviews = relationship('Review', backref='place',
                                cascade='all, delete-orphan')
 
