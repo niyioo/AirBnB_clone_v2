@@ -37,14 +37,8 @@ class Place(BaseModel, Base):
         city = relationship('City', backref='places')
         reviews = relationship('Review', backref='place',
                                cascade='all, delete-orphan')
-
-        # Define the Many-To-Many relationship with Amenity
-        amenities = relationship(
-            'Amenity',
-            secondary=place_amenity,
-            viewonly=False,
-            back_populates='place_amenities'
-        )
+        amenities = relationship('Amenity', secondary=place_amenity, viewonly=False,
+                                 back_populates='place_amenities')
 
     else:
         city_id = ""
