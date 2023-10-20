@@ -24,8 +24,12 @@ class State(BaseModel, Base):
         @property
         def cities(self):
             """Getter attribute in case of file storage"""
-            return [city for city in models.storage.all(City).values()
-                    if city.state_id == self.id]
+            list = []
+            all_cities = models.storage.all(City)
+            for city in all_cities.values():
+                if city.state_id == self.id:
+                    list.append(city)
+            return list
 
     def __init__(self, *args, **kwargs):
         """Initialize the State object"""

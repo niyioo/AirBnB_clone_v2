@@ -34,7 +34,6 @@ class Place(BaseModel, Base):
         longitude = Column(Float)
 
         # Relationships
-        city = relationship('City', backref='places', foreign_keys='Place.city_id')
         reviews = relationship('Review', backref='place',
                                cascade='all, delete-orphan')
 
@@ -60,6 +59,10 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
+    def __init__(self, *args, **kwargs):
+        """initializes Place"""
+        super().__init__(*args, **kwargs)
 
         # Define a getter method for reviews in FileStorage
         def reviews(self):
