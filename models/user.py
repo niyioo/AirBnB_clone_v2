@@ -15,9 +15,10 @@ class User(BaseModel, Base):
     last_name = Column(String(128), nullable=True)
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        places = relationship('Place', backref='user')
-        reviews = relationship('Review', backref='user',
-                               cascade='all, delete-orphan')
+        places = relationship("Place", cascade='all, delete, delete-orphan',
+                              backref="user")
+        reviews = relationship("Review", cascade='all, delete, delete-orphan',
+                               backref="user")
 
     def __init__(self, *args, **kwargs):
         """initializes user"""
