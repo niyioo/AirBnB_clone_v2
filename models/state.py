@@ -3,6 +3,7 @@
 from os import getenv
 from sqlalchemy import String, Column
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 import models
 from models.base_model import BaseModel, Base
 from models.city import City
