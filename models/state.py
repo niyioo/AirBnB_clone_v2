@@ -3,7 +3,6 @@
 from os import getenv
 from sqlalchemy import String, Column
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 import models
 from models.base_model import BaseModel, Base
 from models.city import City
@@ -14,13 +13,18 @@ class State(BaseModel, Base):
     Attributes:
         name: input name
     """
-    __tablename__ = 'states'
-    name = Column(String(128), nullable=False)
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        __tablename__ = 'states'
+        name = Column(String(128), nullable=False)
+        cities = relationship('City', backref='state')
+    else:
+        name = ""
+    
+    def __init__(self, *args, **kwargs):
+        """Initialize the State object"""
+        super().__init__(*args, **kwargs)
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        cities = relationship('City', cascade='all, delete, delete-orphan',
-                              backref='state')
-    else:
         @property
         def cities(self):
             """Getter attribute in case of file storage"""
@@ -31,6 +35,4 @@ class State(BaseModel, Base):
                     list.append(city)
             return list
 
-    def __init__(self, *args, **kwargs):
-        """Initialize the State object"""
-        super().__init__(*args, **kwargs)
+    
