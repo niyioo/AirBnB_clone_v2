@@ -2,7 +2,6 @@
 """
 This Fabric script creates and distributes an archive to web servers.
 """
-
 import os
 import re
 from fabric.api import *
@@ -92,3 +91,34 @@ def deploy():
         return False
 
     return do_deploy(archive_path)
+
+
+def do_clean(number=0):
+    """
+    Delete out-of-date archives from versions
+    and /data/web_static/releases folders.
+
+    Args:
+        number (int): The number of archives to keep,
+        including the most recent.
+    """
+    number = int(number)
+    if number < 1:
+        number = 1
+    else:
+        number += 1  # Adding 1 to keep the most recent archive
+
+    # Clean local versions folder
+    with lcd("versions"):
+        local("ls -t | tail -n +{} | xargs -I {{}} rm -f {{}}".format(number))
+
+    # Clean remote /data/web_static/releases folders on all hosts
+    for host in env.hosts:
+        with settings(host_string=host):
+            with cd("/data/web_static/releases"):
+                run("ls -t | tail -n +{} | xargs -I {{}} rm -rf {{}}"
+                    .format(number))
+
+
+# Run the clean function with the specified number of archives to keep
+do_clean(2)

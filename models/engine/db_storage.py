@@ -4,6 +4,7 @@ import os
 import models
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import BaseModel, Base
 from models.user import User
 from models.state import State
@@ -67,3 +68,7 @@ class DBStorage:
             bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
+
+    def close(self):
+        """Call remove() method on the private session attribute."""
+        self.__session.close()
