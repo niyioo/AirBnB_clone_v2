@@ -8,10 +8,12 @@ from os import getenv
 
 class Amenity(BaseModel, Base):
     """ Amenity class to store Amenity information """
-    __tablename__ = 'amenities'
-
-    name = Column(String(128), nullable=False)
-
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        # Define the Many-To-Many relationship with Place
-        place_amenities = relationship("Place", secondary='place_amenity')
+        __tablename__ = 'amenities'
+        name = Column(String(128), nullable=False)
+    else:
+        name = ""
+
+    def __init__(self, *args, **kwargs):
+        """initializes Amenity"""
+        super().__init__(*args, **kwargs)
