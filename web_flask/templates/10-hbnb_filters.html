@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<HTML lang="en">
+	    <HEAD>
+		            <TITLE>HBNB Filters</TITLE>
+			        </HEAD>
+				    <BODY>
+					            <H1>HBNB Filters</H1>
+						            <FORM action="/hbnb_filters" method="POST">
+								                <H2>States:</H2>
+										            <UL>
+												                    {% for state in states %}
+														                    <LI><input type="checkbox" name="states" value="{{ state.id }}"> {{ state.name }}</LI>
+																                    {% endfor %}
+																		                </UL>
+																				            <H2>Amenities:</H2>
+																					                <UL>
+																								                {% for amenity in amenities %}
+																										                <LI><input type="checkbox" name="amenities" value="{{ amenity.id }}"> {{ amenity.name }}</LI>
+																												                {% endfor %}
+																														            </UL>
+																															                <BUTTON type="submit">Apply filters</BUTTON>
+																																	        </FORM>
+																																		    </BODY>
+</HTML>
