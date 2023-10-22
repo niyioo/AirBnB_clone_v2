@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
-from sqlalchemy import String, Column
-from sqlalchemy.orm import relationship
-import models
+from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import BaseModel, Base
+from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String
+import models
 from models.city import City
+import shlex
 
 
 class State(BaseModel, Base):
@@ -19,10 +21,15 @@ class State(BaseModel, Base):
 
     @property
     def cities(self):
-        """Getter attribute in case of file storage"""
+        var = models.storage.all()
         list = []
-        all_cities = models.storage.all(City)
-        for city in all_cities.values():
-            if city.state_id == self.id:
-                list.append(city)
-        return list
+        result = []
+        for key in var:
+            city = key.replace('.', ' ')
+            city = shlex.split(city)
+            if (city[0] == 'City'):
+                list.append(var[key])
+        for elem in list:
+            if (elem.state_id == self.id):
+                result.append(elem)
+        return (result)
