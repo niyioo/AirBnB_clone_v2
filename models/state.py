@@ -13,26 +13,17 @@ class State(BaseModel, Base):
     Attributes:
         name: input name
     """
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
-        __tablename__ = 'states'
-        name = Column(String(128), nullable=False)
-        cities = relationship('City', backref='state')
-    else:
-        name = ""
-    
-    def __init__(self, *args, **kwargs):
-        """Initialize the State object"""
-        super().__init__(*args, **kwargs)
+    __tablename__ = "states"
+    name = Column(String(128), nullable=False)
+    cities = relationship("City", cascade='all, delete, delete-orphan',
+                          backref="state")
 
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
-        @property
-        def cities(self):
-            """Getter attribute in case of file storage"""
-            list = []
-            all_cities = models.storage.all(City)
-            for city in all_cities.values():
-                if city.state_id == self.id:
-                    list.append(city)
-            return list
-
-    
+    @property
+    def cities(self):
+        """Getter attribute in case of file storage"""
+        list = []
+        all_cities = models.storage.all(City)
+        for city in all_cities.values():
+            if city.state_id == self.id:
+                list.append(city)
+        return list
